@@ -209,7 +209,7 @@ int c_strlen( const char * p )
 {
     if(!p)
 	return 0;
-    return strlen(p);
+    return static_cast<int>(strlen(p));
 }
 
 
@@ -375,7 +375,7 @@ unichar_t *uc_copy(const char *pt) {
     if(!pt)
 return((unichar_t *)0);
 
-    n = strlen(pt);
+    n = static_cast<int>(strlen(pt));
 #ifdef MEMORY_MASK
     if ( (n+1)*sizeof(unichar_t)>=MEMORY_MASK )
 	n = MEMORY_MASK/sizeof(unichar_t)-1;
@@ -553,7 +553,7 @@ unichar_t *utf82u_copy(const char *utf8buf) {
     if ( utf8buf==NULL )
 return( NULL );
 
-    len = strlen(utf8buf);
+    len = static_cast<int>(strlen(utf8buf));
     ubuf = (unichar_t *) malloc((len+1)*sizeof(unichar_t));
 return( utf82u_strncpy(ubuf,utf8buf,len+1));
 }
@@ -619,7 +619,7 @@ char *latin1_2_utf8_copy(const char *lbuf) {
     if ( lbuf==NULL )
 return( NULL );
 
-    len = strlen(lbuf);
+    len = static_cast<int>(strlen(lbuf));
     utf8buf = (char *) malloc(2*len+1);
 return( latin1_2_utf8_strcpy(utf8buf,lbuf));
 }
@@ -632,7 +632,7 @@ char *utf8_2_latin1_copy(const char *utf8buf) {
     if ( utf8buf==NULL )
 return( NULL );
 
-    len = strlen(utf8buf);
+    len = static_cast<int>(strlen(utf8buf));
     pt = lbuf = (char *) malloc(len+1);
     for ( upt=utf8buf; (ch=utf8_ildb(&upt))!='\0'; )
 	if ( ch>=0xff )
@@ -938,7 +938,7 @@ char *StripToASCII(const char *utf8_str) {
     int len, ch;
     const unichar_t *alt;
 
-    len = strlen(utf8_str);
+    len = static_cast<int>(strlen(utf8_str));
     pt = newcr = (char *) malloc(len+1);
     end = pt+len;
     while ( (ch= utf8_ildb(&utf8_str))!='\0' ) {
@@ -1043,8 +1043,8 @@ char *chomp( char *line ) {
 }
 
 int endswith(const char *haystack,const char *needle) {
-    int haylen = strlen( haystack );
-    int nedlen = strlen( needle );
+    int haylen = static_cast<int>(strlen( haystack ));
+    int nedlen = static_cast<int>(strlen( needle ));
     if( haylen < nedlen )
 	return 0;
     const char* p = strstr( haystack + haylen - nedlen, needle );
@@ -1061,7 +1061,7 @@ int endswithi(const char *haystackZ,const char *needleZ) {
 }
 
 int endswithi_partialExtension( const char *haystackZ,const char *needleZ) {
-    int nedlen = strlen(needleZ);
+    int nedlen = static_cast<int>(strlen(needleZ));
     if( nedlen == 0 ) {
 	return 0;
     }
@@ -1133,7 +1133,7 @@ char* str_replace_all( char* s, char* orig, char* replacement, int free_s )
     count++;
 
     // more than strictly needed, but always enough RAM.
-    int retsz = strlen(s) + count*strlen(replacement) + 1;
+    int retsz = static_cast<int>(strlen(s)) + count * static_cast<int>(strlen(replacement)) + 1;
     char* ret = (char *) malloc( retsz );
     memset( ret, '\0', retsz );
     char* output = ret;
@@ -1150,8 +1150,8 @@ char* str_replace_all( char* s, char* orig, char* replacement, int free_s )
 	if( p > remains )
 	    strncpy( output, remains, p-remains );
 	strcat( output, replacement );
-	output += strlen(output);
-	remains = p + strlen(orig);
+	output += static_cast<int>(strlen(output));
+	remains = p + static_cast<int>(strlen(orig));
     }
 
     if( free_s )
